@@ -95,7 +95,7 @@ class PDFWithQRCodes:
 
 def main():
     logging.debug("Starting main function")
-    urls = ["https://jbhs-pl.addisonking.rocks/redir/{}".format(x) for x in range(1, 61)]
+    urls = ["https://qr.jbhs-pl.addisonking.rocks/redir/{}".format(x) for x in range(1, 61)]
     
     pdf_creator = PDFWithQRCodes()
     pdf_creator.create_pdf_with_qr_codes(urls)
