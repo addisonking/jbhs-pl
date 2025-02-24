@@ -2,7 +2,13 @@ import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { produce } from 'sveltekit-sse';
 
-const prisma = new PrismaClient().$extends(withAccelerate())
+const prisma = new PrismaClient({
+	datasources: {
+		db: {
+			url: process.env.DATABASE_URL,
+		},
+	},
+}).$extends(withAccelerate())
 
 function omitIds(data: any) {
 	return JSON.parse(

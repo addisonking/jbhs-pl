@@ -4,7 +4,13 @@ import { error } from '@sveltejs/kit';
 import { differenceInMinutes } from 'date-fns';
 import type { Actions, PageServerLoad } from './$types';
 
-const prisma = new PrismaClient().$extends(withAccelerate())
+const prisma = new PrismaClient({
+	datasources: {
+		db: {
+			url: process.env.DATABASE_URL,
+		},
+	},
+}).$extends(withAccelerate())
 
 export const actions = {
 	checkin: async ({ params }) => {
