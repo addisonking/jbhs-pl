@@ -24,8 +24,12 @@ async function hasDbUpdated(lastState: any) {
 		include: {
 			rows: {
 				include: {
-					stalls: true
-				}
+					stalls: {
+						orderBy: {
+							id: 'asc'
+						}
+					}
+				},
 			}
 		}
 	});
