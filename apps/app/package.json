@@ -52,6 +52,11 @@
 		"sveltekit-sse": "^0.13.12"
 	},
 	"prisma": {
-		"seed": "bun run prisma/seed.ts"
+		"seed": "bun run prisma/seed.ts",
+		"engines": {
+			"binary": "false",
+			"library": "false",
+			"edge": "true"
+		}
 	}
 }
