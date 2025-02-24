@@ -1,9 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client/edge'
+import { withAccelerate } from '@prisma/extension-accelerate'
 import { error } from '@sveltejs/kit';
 import { differenceInMinutes } from 'date-fns';
 import type { Actions, PageServerLoad } from './$types';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient().$extends(withAccelerate())
 
 export const actions = {
 	checkin: async ({ params }) => {
