@@ -1,7 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client/edge'
+import { withAccelerate } from '@prisma/extension-accelerate'
 import type { PageServerLoad } from './$types';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient().$extends(withAccelerate())
 
 export const load = (async () => {
 	const rows = await prisma.parkingFacility.findMany({
