@@ -6,7 +6,6 @@ import os
 from typing import List
 import logging
 
-# Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class QRCodeGenerator:
@@ -56,20 +55,21 @@ class PDFWithQRCodes:
             os.makedirs(images_dir, exist_ok=True)
             img_path = os.path.join(images_dir, f"qr_temp_{index}.png")
             img.save(img_path)
-            pdf_w = (self.pdf.w - 60) / 2
+            pdf_w = (self.pdf.w - 50) / 2
             x = 20 + (position % 2) * (pdf_w + 20)
             y = 20
-            self.pdf.image(img_path, x=x, y=y + 10, w=pdf_w)
+            self.pdf.image(img_path, x=x, y=y + 50, w=pdf_w)
         
-        self.pdf.set_font("Arial", size=12)
-        self.pdf.text(x=x + pdf_w / 2, y=y + pdf_w + 20, txt=str(index))
+        self.pdf.set_font("Arial", size=8)
+        self.pdf.text(x + pdf_w / 2, y=y + pdf_w + 60, txt=str(index))
         self.pdf.set_font("Arial", size=36, style='B')
-        self.pdf.text(x=x + pdf_w / 2 - 30, y=y + 5, txt="SCAN ME")
+        self.pdf.set_xy(x + pdf_w / 2 - 40, y + 5)
+        self.pdf.multi_cell(80, 12, "PLEASE SCAN ME TO CHECK IN", align='C')
         logging.debug("QR code added to PDF successfully")
 
     def draw_perforation_line(self):
         logging.debug("Drawing perforation line")
-        self.pdf.set_draw_color(0, 0, 0)  # Black color
+        self.pdf.set_draw_color(0, 0, 0)
         self.pdf.set_line_width(0.5)
         pdf_w = self.pdf.w
         pdf_h = self.pdf.h
