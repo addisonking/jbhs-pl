@@ -29,7 +29,7 @@
 
 <main class="flex flex-1 items-center justify-center">
 	<section class="mx-2 space-y-4 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
-		<div class="grid grid-cols-2 gap-4">
+		<div class="grid grid-cols-1 gap-4">
 			<Card.Root>
 				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 					<Card.Title class="text-sm font-medium">Current Vacancy</Card.Title>

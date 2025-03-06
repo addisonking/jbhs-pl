@@ -11,7 +11,7 @@
 {#snippet rowComponent(row: ParkingRow)}
 	{#snippet stallComponent(opening: 'top' | 'bottom', occupied: boolean)}
 		<div
-			class={`m-0.5 h-8 w-4 rounded-sm border-foreground sm:h-12 sm:w-8 sm:rounded-lg ${opening === 'top' ? 'border-t-0' : 'border-b-0'} ${occupied ? 'bg-red-500' : 'bg-green-500'}`}
+			class={`m-0.5 h-8 w-3.5 rounded-sm border-foreground sm:h-12 sm:w-8 sm:rounded-lg ${opening === 'top' ? 'border-t-0' : 'border-b-0'} ${occupied ? 'bg-red-500' : 'bg-green-500'}`}
 			aria-label={occupied ? 'Occupied stall' : 'Available stall'}
 		></div>
 	{/snippet}
