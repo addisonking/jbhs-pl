@@ -53,8 +53,7 @@ export const actions = {
 		const { error: updateError } = await supabase
 			.from('ParkingStall')
 			.update({
-				occupied: false,
-				lastUpdated: new Date()
+				occupied: false
 			})
 			.eq('id', stallId);
 
