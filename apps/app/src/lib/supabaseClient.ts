@@ -1,6 +1,4 @@
 import { createClient } from '@supabase/supabase-js'
+import { SUPABASE_KEY, SUPABASE_URL } from '$env/static/private'
 
-const supabaseUrl = 'https://awokccnyavyvulamvpvd.supabase.co'
-const supabaseKey = process.env.SUPABASE_KEY || ''
-
-export const supabase = createClient(supabaseUrl, supabaseKey)
+export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
