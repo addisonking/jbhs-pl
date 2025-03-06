@@ -1,16 +1,7 @@
-import { PrismaClient } from '@prisma/client/edge'
-import { withAccelerate } from '@prisma/extension-accelerate'
+import { supabase } from "$lib/supabaseClient";
 import { error } from '@sveltejs/kit';
 import { differenceInMinutes } from 'date-fns';
 import type { Actions, PageServerLoad } from './$types';
-
-const prisma = new PrismaClient({
-	datasources: {
-		db: {
-			url: process.env.DATABASE_URL,
-		},
-	},
-}).$extends(withAccelerate())
 
 export const actions = {
 	checkin: async ({ params }) => {
@@ -20,29 +11,35 @@ export const actions = {
 			throw error(400, 'Stall ID is required');
 		}
 
-		const stall = await prisma.parkingStall.findUnique({
-			where: { id: stallId }
-		});
+		const { data: stall, error: stallError } = await supabase
+			.from('ParkingStall')
+			.select('*')
+			.eq('id', stallId)
+			.single();
 
-		if (!stall) {
+		if (stallError) {
 			throw error(404, 'Stall not found');
 		}
 
 		const now = new Date();
-		if (stall.lastUpdated && differenceInMinutes(now, stall.lastUpdated) < 5) {
+		if (stall.lastUpdated && differenceInMinutes(now, new Date(stall.lastUpdated)) < 5) {
 			return {
 				success: false,
 				message: 'Vehicle checked in too soon. Please wait a few minutes and try again.'
 			};
 		}
 
-		await prisma.parkingStall.update({
-			where: { id: stallId },
-			data: {
+		const { error: updateError } = await supabase
+			.from('ParkingStall')
+			.update({
 				occupied: true,
 				lastUpdated: now
-			}
-		});
+			})
+			.eq('id', stallId);
+
+		if (updateError) {
+			throw error(500, 'Failed to update stall');
+		}
 
 		return { success: true };
 	},
@@ -53,13 +50,17 @@ export const actions = {
 			throw error(400, 'Stall ID is required');
 		}
 
-		await prisma.parkingStall.update({
-			where: { id: stallId },
-			data: {
+		const { error: updateError } = await supabase
+			.from('ParkingStall')
+			.update({
 				occupied: false,
 				lastUpdated: new Date()
-			}
-		});
+			})
+			.eq('id', stallId);
+
+		if (updateError) {
+			throw error(500, 'Failed to update stall');
+		}
 
 		return { success: true };
 	}
@@ -72,18 +73,13 @@ export const load = (async ({ params }) => {
 		throw error(400, 'Stall ID is required');
 	}
 
-	const stall = await prisma.parkingStall.findUnique({
-		where: { id: stallId },
-		include: {
-			parkingRow: {
-				include: {
-					parkingFacility: true
-				}
-			}
-		}
-	});
+	const { data: stall, error: stallError } = await supabase
+		.from('ParkingStall')
+		.select('*')
+		.eq('id', stallId)
+		.single();
 
-	if (!stall) {
+	if (stallError) {
 		throw error(404, 'Stall not found');
 	}
 

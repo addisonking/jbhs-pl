@@ -1,14 +1,5 @@
-import { PrismaClient } from '@prisma/client/edge'
-import { withAccelerate } from '@prisma/extension-accelerate'
+import { supabase } from "$lib/supabaseClient";
 import { produce } from 'sveltekit-sse';
-
-const prisma = new PrismaClient({
-	datasources: {
-		db: {
-			url: process.env.DATABASE_URL,
-		},
-	},
-}).$extends(withAccelerate())
 
 function omitIds(data: any) {
 	return JSON.parse(
@@ -19,20 +10,41 @@ function omitIds(data: any) {
 	);
 }
 
+async function fetchParkingStalls(rowId: number) {
+	const { data: stalls, error } = await supabase
+		.from('ParkingStall')
+		.select('id, occupied, lastUpdated')
+		.eq('parkingRowId', rowId)  // Join ParkingStall to the current ParkingRow
+		.order('id', { ascending: true });  // Order by id of ParkingStall
+
+	if (error) {
+		return [];
+	}
+
+	return stalls;
+}
+
 async function hasDbUpdated(lastState: any) {
-	const currentState = await prisma.parkingFacility.findMany({
-		include: {
-			rows: {
-				include: {
-					stalls: {
-						orderBy: {
-							id: 'asc'
-						}
-					}
-				},
-			}
+	const { data: currentState, error } = await supabase
+		.from('ParkingFacility')
+		.select(`
+			id, 
+			rows:ParkingRow!ParkingRow_parkingFacilityId_fkey(id, order, opening, group)
+		`)
+		.order('order', { foreignTable: 'ParkingRow' });  // Ensure rows are ordered by 'order'
+
+	if (error) {
+		console.error('Error fetching parking data:', error);
+		return null;
+	}
+
+	// Fetch and order stalls for each row
+	for (let facility of currentState) {
+		for (let row of facility.rows) {
+			const stalls = await fetchParkingStalls(row.id);
+			row.stalls = stalls;  // Attach ordered stalls to the row
 		}
-	});
+	}
 
 	const currentStateWithoutIds = omitIds(currentState);
 
@@ -53,7 +65,7 @@ export function POST() {
 				lastState = updatedState;
 			}
 
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			await new Promise((resolve) => setTimeout(resolve, 1000));  // Check for updates every second
 		}
 	});
 }

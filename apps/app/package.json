@@ -39,24 +39,13 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint .",
-		"reset-db": "bun x prisma db push --force-reset && npx prisma db seed"
+		"lint": "prettier --check . && eslint ."
 	},
 	"type": "module",
 	"dependencies": {
-		"@prisma/client": "^6.4.1",
-		"@prisma/extension-accelerate": "^1.2.2",
+		"@supabase/supabase-js": "^2.49.1",
 		"@types/node": "^22.13.1",
 		"date-fns": "^4.1.0",
-		"prisma": "^6.4.1",
 		"sveltekit-sse": "^0.13.12"
-	},
-	"prisma": {
-		"seed": "bun run prisma/seed.ts",
-		"engines": {
-			"binary": "false",
-			"library": "false",
-			"edge": "true"
-		}
 	}
 }

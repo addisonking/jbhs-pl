@@ -22,9 +22,9 @@
 		}
 	});
 
-	$effect(() => {
-		console.log(parkingFacility);
-	});
+	// $effect(() => {
+	// 	console.log(parkingFacility);
+	// });
 </script>
 
 <main class="flex flex-1 items-center justify-center">
