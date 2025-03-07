@@ -14,8 +14,8 @@ async function fetchParkingStalls(rowId: number) {
 	const { data: stalls, error } = await supabase
 		.from('ParkingStall')
 		.select('id, occupied, lastUpdated')
-		.eq('parkingRowId', rowId)  // Join ParkingStall to the current ParkingRow
-		.order('id', { ascending: true });  // Order by id of ParkingStall
+		.eq('parkingRowId', rowId)
+		.order('id', { ascending: true });
 
 	if (error) {
 		return [];
@@ -24,48 +24,40 @@ async function fetchParkingStalls(rowId: number) {
 	return stalls;
 }
 
-async function hasDbUpdated(lastState: any) {
+async function fetchCurrentState() {
 	const { data: currentState, error } = await supabase
 		.from('ParkingFacility')
 		.select(`
 			id, 
 			rows:ParkingRow!ParkingRow_parkingFacilityId_fkey(id, order, opening, group)
 		`)
-		.order('order', { foreignTable: 'ParkingRow' });  // Ensure rows are ordered by 'order'
+		.order('order', { foreignTable: 'ParkingRow' });
 
 	if (error) {
 		console.error('Error fetching parking data:', error);
 		return null;
 	}
 
-	// Fetch and order stalls for each row
 	for (let facility of currentState) {
 		for (let row of facility.rows) {
 			const stalls = await fetchParkingStalls(row.id);
-			row.stalls = stalls;  // Attach ordered stalls to the row
+			row.stalls = stalls;
 		}
 	}
 
-	const currentStateWithoutIds = omitIds(currentState);
-
-	return JSON.stringify(currentStateWithoutIds) !== JSON.stringify(lastState)
-		? currentStateWithoutIds
-		: null;
+	return omitIds(currentState);
 }
 
 export function POST() {
 	return produce(async function start({ emit }) {
-		let lastState = null;
-
 		while (true) {
-			let updatedState = await hasDbUpdated(lastState);
+			const currentState = await fetchCurrentState();
 
-			if (updatedState) {
-				emit('message', JSON.stringify(updatedState));
-				lastState = updatedState;
+			if (currentState) {
+				emit('message', JSON.stringify(currentState));
 			}
 
-			await new Promise((resolve) => setTimeout(resolve, 1000));  // Check for updates every second
+			await new Promise((resolve) => setTimeout(resolve, 2000));  // Send updates every 2 seconds
 		}
 	});
 }
