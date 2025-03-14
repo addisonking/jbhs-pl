@@ -22,7 +22,7 @@
 					>
 					Parking Lot Managment System - Designed, Developed, and Implemented by
 					<a
-						href="addisonking.com"
+						href="addisonking.rocks"
 						target="_blank"
 						rel="noopener"
 						class="font-medium underline underline-offset-4">Addison King</a
