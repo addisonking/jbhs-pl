@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { Map } from '@lucide/svelte';
 	import { page } from '$app/state';
 
 	import '../app.pcss';
@@ -13,7 +12,7 @@
 		<header class="bg-background container z-40">
 			<div class="flex h-16 items-center justify-end">
 				<Button variant="outline" href="/">
-					<Map class="mr-1" /> Live Map
+					Live Map
 				</Button>
 			</div>
 		</header>
