@@ -25,6 +25,7 @@ export const actions = {
 		if (stall.lastUpdated && differenceInMinutes(now, new Date(stall.lastUpdated)) < 5) {
 			return {
 				success: false,
+				action: 'checkin',
 				message: 'Vehicle checked in too soon. Please wait a few minutes and try again.'
 			};
 		}
@@ -41,7 +42,7 @@ export const actions = {
 			throw error(500, 'Failed to update stall');
 		}
 
-		return { success: true };
+		return { success: true, action: 'checkin' };
 	},
 	checkout: async ({ params }) => {
 		const stallId = params.id;
@@ -61,7 +62,7 @@ export const actions = {
 			throw error(500, 'Failed to update stall');
 		}
 
-		return { success: true };
+		return { success: true, action: 'checkout' };
 	}
 } as Actions;
 

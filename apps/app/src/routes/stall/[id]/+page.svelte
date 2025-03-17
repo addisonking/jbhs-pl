@@ -23,7 +23,7 @@
 	<Card.Root class="w-full max-w-sm">
 		<Card.Header>
 			<Card.Title>{header}</Card.Title>
-			<Card.Description>{description}</Card.Description>
+			<Card.Description>{@html description}</Card.Description>
 		</Card.Header>
 		<Card.Content>
 			{#if action}
@@ -35,7 +35,7 @@
 				</form>
 			{/if}
 		</Card.Content>
-		<Card.Footer>
+		<Card.Footer class="mt-4">
 			<p class="font-mono text-sm text-gray-500">{footer}</p>
 		</Card.Footer>
 	</Card.Root>
@@ -53,9 +53,9 @@
 	<Card.Root class="w-full max-w-sm">
 		<Card.Header>
 			<Card.Title>{header}</Card.Title>
-			<Card.Description>{description}</Card.Description>
+			<Card.Description>{@html description}</Card.Description>
 		</Card.Header>
-		<Card.Footer>
+		<Card.Footer class="mt-4">
 			<p class="font-mono text-sm text-gray-500">{footer}</p>
 		</Card.Footer>
 	</Card.Root>
@@ -68,7 +68,9 @@
 				{#if form.success}
 					{@render responseCard({
 						header: 'Success',
-						description: 'Action completed successfully! You may now exit this page.',
+						description: form.action === 'checkin' 
+							? 'Action completed successfully! You may now exit this page. <b>Please remember to scan the same code to checkout when you leave.</b>'
+							: 'Action completed successfully! You may now exit this page.',
 						footer: `debug ${stallData.id}`
 					})}
 				{:else if !form.success}
