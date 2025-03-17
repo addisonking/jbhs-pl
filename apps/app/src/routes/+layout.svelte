@@ -20,13 +20,7 @@
 					>
 						John Bowne High School</a
 					>
-					Parking Lot Managment System - Designed, Developed, and Implemented by
-					<a
-						href="https://addisonking.rocks"
-						target="_blank"
-						rel="noopener"
-						class="font-medium underline underline-offset-4">Addison King</a
-					>
+					Parking Lot Managment System
 					- <a href="/privacy" class="font-medium underline underline-offset-4">Data Usage</a>
 				</p>
 			</div>
