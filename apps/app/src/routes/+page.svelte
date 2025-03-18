@@ -2,7 +2,9 @@
 	import LotRenderer from '$lib/components/app/lot-renderer.svelte';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { source } from 'sveltekit-sse';
+	import { Info } from '@lucide/svelte';
 
 	const connection = source('/events/stream');
 	const message = connection.select('message');
@@ -33,6 +35,19 @@
 			<Card.Root>
 				<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
 					<Card.Title class="text-sm font-medium">Current Vacancy</Card.Title>
+					<Dialog.Root>
+						<Dialog.Trigger>
+							<Info class="text-muted-foreground h-4 w-4 cursor-pointer" />
+						</Dialog.Trigger>
+						<Dialog.Content>
+							<Dialog.Header>
+								<Dialog.Title>Notice</Dialog.Title>
+								<Dialog.Description>
+									Displayed data may not fully reflect actual occupancy due to potential discrepancies in user reporting.
+								</Dialog.Description>
+							</Dialog.Header>
+						</Dialog.Content>
+					</Dialog.Root>
 				</Card.Header>
 				<Card.Content>
 					<div class="text-2xl font-bold">
