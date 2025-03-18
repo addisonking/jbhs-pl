@@ -1,4 +1,4 @@
-import { supabase } from "$lib/supabaseClient";
+import { supabase } from '$lib/supabaseClient';
 import { error } from '@sveltejs/kit';
 import { differenceInMinutes } from 'date-fns';
 import type { Actions, PageServerLoad } from './$types';

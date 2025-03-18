@@ -1,7 +1,7 @@
-import { supabase } from "$lib/supabaseClient";
+import { supabase } from '$lib/supabaseClient';
 import { produce } from 'sveltekit-sse';
 
-function omitIds(data: any) {
+function omitIds<T>(data: T): T {
 	return JSON.parse(
 		JSON.stringify(data, (key, value) => {
 			if (key === 'id') return undefined;
@@ -27,10 +27,12 @@ async function fetchParkingStalls(rowId: number) {
 async function fetchCurrentState() {
 	const { data: currentState, error } = await supabase
 		.from('ParkingFacility')
-		.select(`
+		.select(
+			`
 			id, 
 			rows:ParkingRow!ParkingRow_parkingFacilityId_fkey(id, order, opening, group)
-		`)
+		`
+		)
 		.order('order', { foreignTable: 'ParkingRow' });
 
 	if (error) {
@@ -38,8 +40,8 @@ async function fetchCurrentState() {
 		return null;
 	}
 
-	for (let facility of currentState) {
-		for (let row of facility.rows) {
+	for (const facility of currentState) {
+		for (const row of facility.rows) {
 			const stalls = await fetchParkingStalls(row.id);
 			row.stalls = stalls;
 		}
@@ -57,7 +59,7 @@ export function POST() {
 				emit('message', JSON.stringify(currentState));
 			}
 
-			await new Promise((resolve) => setTimeout(resolve, 2000));  // Send updates every 2 seconds
+			await new Promise((resolve) => setTimeout(resolve, 2000)); // Send updates every 2 seconds
 		}
 	});
 }

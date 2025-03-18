@@ -37,13 +37,14 @@
 					<Card.Title class="text-sm font-medium">Current Vacancy</Card.Title>
 					<Dialog.Root>
 						<Dialog.Trigger>
-							<Info class="text-muted-foreground h-4 w-4 cursor-pointer" />
+							<Info class="h-4 w-4 cursor-pointer text-muted-foreground" />
 						</Dialog.Trigger>
 						<Dialog.Content>
 							<Dialog.Header>
 								<Dialog.Title>Notice</Dialog.Title>
 								<Dialog.Description>
-									Displayed data may not fully reflect actual occupancy due to potential discrepancies in user reporting.
+									Displayed data may not fully reflect actual occupancy due to potential
+									discrepancies in user reporting.
 								</Dialog.Description>
 							</Dialog.Header>
 						</Dialog.Content>

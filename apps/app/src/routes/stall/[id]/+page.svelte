@@ -68,9 +68,10 @@
 				{#if form.success}
 					{@render responseCard({
 						header: 'Success',
-						description: form.action === 'checkin' 
-							? 'Action completed successfully! You may now exit this page. <b>Please remember to scan the same code to checkout when you leave.</b>'
-							: 'Action completed successfully! You may now exit this page.',
+						description:
+							form.action === 'checkin'
+								? 'Action completed successfully! You may now exit this page. <b>Please remember to scan the same code to checkout when you leave.</b>'
+								: 'Action completed successfully! You may now exit this page.',
 						footer: `debug ${stallData.id}`
 					})}
 				{:else if !form.success}
